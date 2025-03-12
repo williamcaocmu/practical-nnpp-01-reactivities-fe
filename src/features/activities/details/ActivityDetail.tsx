@@ -6,6 +6,7 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { Link } from "react-router";
 
 type Props = {};
 
@@ -21,7 +22,9 @@ export default function ActivityDetail({}: Props) {
         <Typography variant="body1">Activity Description</Typography>
       </CardContent>
       <CardActions>
-        <Button color="primary">Edit</Button>
+        <Button component={Link} to={`/manage/1`} color="primary">
+          Edit
+        </Button>
         <Button color="inherit">Cancel</Button>
       </CardActions>
     </Card>

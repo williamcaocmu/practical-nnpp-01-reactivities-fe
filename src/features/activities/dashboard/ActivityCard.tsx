@@ -7,6 +7,7 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
+import { Link } from "react-router";
 
 type Props = {};
 
@@ -28,7 +29,12 @@ export default function ActivityCard({}: Props) {
       >
         <Chip label="Activity Category" variant="outlined" />
         <Box display="flex" gap={3}>
-          <Button size="medium" variant="contained">
+          <Button
+            component={Link}
+            size="medium"
+            variant="contained"
+            to={`/activities/1`}
+          >
             View
           </Button>
           <Button color="error" size="medium" variant="contained">
