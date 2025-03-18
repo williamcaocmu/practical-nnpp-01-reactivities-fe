@@ -1,5 +1,6 @@
 import { Grid2 } from "@mui/material";
 import ActivityList from "./ActivityList";
+import ActivityFilters from "./ActivityFilters";
 
 const activities = [
   {
@@ -134,8 +135,8 @@ export default function ActivityDashboard() {
       <Grid2 size={7}>
         <ActivityList activities={activities} />
       </Grid2>
-      <Grid2 size={5} sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        Activity filters go here
+      <Grid2 size={4}>
+        <ActivityFilters />
       </Grid2>
     </Grid2>
   );
