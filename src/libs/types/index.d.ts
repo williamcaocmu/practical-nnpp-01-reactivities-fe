@@ -12,3 +12,11 @@ type Activity = {
   longitude: number;
   date: Date | string;
 };
+
+type CursorPagedList<T> = {
+  items: T[];
+  pageInfo: {
+    hasNextPage: boolean;
+    nextCursor: string;
+  };
+};
