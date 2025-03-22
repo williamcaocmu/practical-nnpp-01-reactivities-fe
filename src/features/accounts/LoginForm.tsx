@@ -1,13 +1,14 @@
 import { LockOpen } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useAccount } from "@/libs/hooks/useAccount";
 import { FormEvent } from "react";
 import { useNavigate } from "react-router";
 
 export default function LoginForm() {
   const { loginUser } = useAccount();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -22,7 +23,7 @@ export default function LoginForm() {
       },
       {
         onSuccess: () => {
-          navigate("/activities");
+          navigate(location.state?.from || "/activities");
         },
       }
     );

@@ -30,7 +30,7 @@ export const useAccount = () => {
     },
   });
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ACCOUNT_QUERY_KEYS.user,
     queryFn: async () => {
       const response = await agent.get("/auth/profile");
@@ -39,5 +39,5 @@ export const useAccount = () => {
     enabled: !!queryClient.getQueryData(ACCOUNT_QUERY_KEYS.user),
   });
 
-  return { loginUser, user, logoutUser };
+  return { loginUser, user, logoutUser, isLoadingUser };
 };
