@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import PhotoUploadWidget from "@/shared/components/PhotoUploadWidget";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
@@ -29,13 +30,16 @@ export default function ProfilePhotos() {
       <Divider sx={{ my: 2 }} />
 
       <Box>
-        <ImageList sx={{ height: 450 }} cols={6} rowHeight={164}>
-          <>
-            {photos?.map((photo) => (
-              <ImageListItem key={photo.id}>
-                <img alt={"user profile image"} src={photo.url} />
+        {editMode ? (
+          <PhotoUploadWidget />
+        ) : (
+          <ImageList sx={{ height: 450 }} cols={6} rowHeight={164}>
+            <>
+              {photos?.map((photo) => (
+                <ImageListItem key={photo.id}>
+                  <img alt={"user profile image"} src={photo.url} />
 
-                {/* <div>
+                  {/* <div>
                   <Box sx={{ position: "absolute", top: 0, left: 0 }}>
                     Star Button
                   </Box>
@@ -44,10 +48,11 @@ export default function ProfilePhotos() {
                     Delete Button
                   </Box>
                 </div> */}
-              </ImageListItem>
-            ))}
-          </>
-        </ImageList>
+                </ImageListItem>
+              ))}
+            </>
+          </ImageList>
+        )}
       </Box>
     </Box>
   );
