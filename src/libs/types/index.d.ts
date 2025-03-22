@@ -15,6 +15,8 @@ type Activity = {
   isGoing: boolean;
   hostId: string;
   host: Profile;
+  isHost: boolean;
+  isGoing: boolean;
 };
 
 type CursorPagedList<T> = {

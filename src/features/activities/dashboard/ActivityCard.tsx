@@ -1,3 +1,4 @@
+import ProfileCard from "@/features/profiles/ProfileCard";
 import { AccessTime, Place } from "@mui/icons-material";
 import {
   Avatar,
@@ -76,14 +77,7 @@ export default function ActivityCard({ activity }: Props) {
           sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
         >
           {activity.attendees.map((att) => (
-            <Avatar
-              key={att.id}
-              src={att.imageUrl}
-              alt={att.displayName}
-              component={Link}
-              to={`/profiles/${att.id}`}
-              sx={{ width: 24, height: 24 }}
-            />
+            <ProfileCard key={att.id} profile={att} />
           ))}
         </Box>
       </CardContent>
