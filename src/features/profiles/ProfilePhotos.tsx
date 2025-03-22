@@ -12,7 +12,7 @@ import { useState } from "react";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos } = useProfile(id);
+  const { photos, isCurrentUser } = useProfile(id);
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -20,9 +20,11 @@ export default function ProfilePhotos() {
       <Box display="flex" justifyContent="space-between">
         <Typography variant="h5">Photos</Typography>
 
-        <Button onClick={() => setEditMode(!editMode)}>
-          {editMode ? "Cancel" : "Add photo"}
-        </Button>
+        {isCurrentUser && (
+          <Button onClick={() => setEditMode(!editMode)}>
+            {editMode ? "Cancel" : "Add photo"}
+          </Button>
+        )}
       </Box>
       <Divider sx={{ my: 2 }} />
 
