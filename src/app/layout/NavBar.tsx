@@ -8,9 +8,12 @@ import {
   MenuItem,
 } from "@mui/material";
 import { NavLink } from "react-router";
-import MenuItemLink from "../../shared/components/MenuItemLink";
+import MenuItemLink from "@/shared/components/MenuItemLink";
+import { useAccount } from "@/libs/hooks/useAccount";
 
 export default function NavBar() {
+  const { user } = useAccount();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -38,7 +41,16 @@ export default function NavBar() {
               <MenuItemLink to="/activities">Activities</MenuItemLink>
               <MenuItemLink to="/createActivity">Create Activity</MenuItemLink>
             </Box>
-            <MenuItem>User menu</MenuItem>
+            <Box display="flex" alignContent="center">
+              {user ? (
+                <Typography>Welcome {user.displayName}</Typography>
+              ) : (
+                <>
+                  <MenuItemLink to="/login">Login</MenuItemLink>
+                  <MenuItemLink to="/register">Register</MenuItemLink>
+                </>
+              )}
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
