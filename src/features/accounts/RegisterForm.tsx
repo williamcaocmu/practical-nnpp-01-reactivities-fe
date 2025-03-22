@@ -1,10 +1,32 @@
+import { useAccount } from "@/libs/hooks/useAccount";
 import { LockOpen } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router";
+import { FormEvent } from "react";
+import { Link, useNavigate } from "react-router";
 
 export default function RegisterForm() {
-  const onSubmit = async (data: object) => {};
+  const { registerUser } = useAccount();
+  const navigate = useNavigate();
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const credentials = Object.fromEntries(formData);
+
+    await registerUser.mutateAsync(
+      {
+        email: credentials.email as string,
+        password: credentials.password as string,
+        displayName: credentials.displayName as string,
+      },
+      {
+        onSuccess: () => {
+          navigate("/login");
+        },
+      }
+    );
+  };
 
   return (
     <Paper

@@ -36,8 +36,19 @@ export const useAccount = () => {
       const response = await agent.get("/auth/profile");
       return response.data;
     },
-    enabled: !!queryClient.getQueryData(ACCOUNT_QUERY_KEYS.user),
+    enabled: !queryClient.getQueryData(ACCOUNT_QUERY_KEYS.user),
   });
 
-  return { loginUser, user, logoutUser, isLoadingUser };
+  const registerUser = useMutation({
+    mutationFn: async (credentials: {
+      email: string;
+      password: string;
+      displayName: string;
+    }) => {
+      const response = await agent.post("/auth/register", credentials);
+      return response.data;
+    },
+  });
+
+  return { loginUser, user, logoutUser, isLoadingUser, registerUser };
 };
