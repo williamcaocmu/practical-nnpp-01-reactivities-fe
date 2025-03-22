@@ -20,3 +20,10 @@ type CursorPagedList<T> = {
     nextCursor: string;
   };
 };
+
+type User = {
+  id: string;
+  email: string;
+  displayName: string;
+  imageUrl?: string;
+};

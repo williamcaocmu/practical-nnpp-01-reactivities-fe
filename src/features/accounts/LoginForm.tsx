@@ -2,8 +2,30 @@ import { LockOpen } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router";
+import { useAccount } from "@/libs/hooks/useAccount";
+import { FormEvent } from "react";
 
 export default function LoginForm() {
+  const { loginUser } = useAccount();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const credentials = Object.fromEntries(formData);
+
+    await loginUser.mutateAsync(
+      {
+        email: credentials.email as string,
+        password: credentials.password as string,
+      },
+      {
+        onSuccess: () => {
+          console.log("success");
+        },
+      }
+    );
+  };
+
   return (
     <Paper
       component="form"
@@ -16,6 +38,7 @@ export default function LoginForm() {
         mx: "auto",
         borderRadius: 3,
       }}
+      onSubmit={handleSubmit}
     >
       <Box
         display="flex"
