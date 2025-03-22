@@ -4,6 +4,7 @@ import agent from "@/libs/api/agent";
 const PROFILE_QUERY_KEY = {
   all: ["profiles"],
   profile: (id: string) => [...PROFILE_QUERY_KEY.all, id],
+  photos: (id: string) => [...PROFILE_QUERY_KEY.profile(id), "photos"],
 };
 
 export const useProfile = (id?: string) => {
@@ -15,5 +16,13 @@ export const useProfile = (id?: string) => {
     },
   });
 
-  return { profile, isLoadingProfile };
+  const { data: photos, isLoading: isLoadingPhotos } = useQuery({
+    queryKey: PROFILE_QUERY_KEY.photos(id as string),
+    queryFn: async () => {
+      const response = await agent.get<Photo[]>(`/profiles/${id}/photos`);
+      return response.data;
+    },
+  });
+
+  return { profile, isLoadingProfile, photos, isLoadingPhotos };
 };

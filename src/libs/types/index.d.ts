@@ -40,3 +40,8 @@ type Profile = {
   bio?: string;
   imageUrl?: string;
 };
+
+type Photo = {
+  id: string;
+  url: string;
+};
