@@ -8,14 +8,15 @@ const ACCOUNT_QUERY_KEYS = {
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
+  const userCache = queryClient.getQueryData<User>(ACCOUNT_QUERY_KEYS.user);
 
   const loginUser = useMutation({
     mutationFn: async (credentials: { email: string; password: string }) => {
       const response = await agent.post("/auth/login", credentials);
       return response.data;
     },
-    onSuccess: async (data) => {
-      await queryClient.setQueryData(ACCOUNT_QUERY_KEYS.user, data);
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ACCOUNT_QUERY_KEYS.user });
     },
   });
 
@@ -36,7 +37,7 @@ export const useAccount = () => {
       const response = await agent.get("/auth/profile");
       return response.data;
     },
-    enabled: !queryClient.getQueryData(ACCOUNT_QUERY_KEYS.user),
+    enabled: !userCache,
   });
 
   const registerUser = useMutation({
