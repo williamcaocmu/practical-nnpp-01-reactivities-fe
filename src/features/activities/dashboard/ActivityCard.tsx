@@ -13,14 +13,15 @@ import {
 import { Link } from "react-router";
 
 type Props = {
-  activity: Activity;
+  activity: Activity & { isGoing: boolean; isHost: boolean };
 };
 
 export default function ActivityCard({ activity }: Props) {
-  const isHost = false;
-  const isGoing = false;
+  const isHost = activity.isHost;
+  const isGoing = activity.isGoing;
+
   const label = isHost ? "You are hosting" : "You are going";
-  const isCancelled = false;
+  const isCancelled = activity.isCanceled;
   const color = isHost ? "secondary" : isGoing ? "warning" : "default";
 
   if (!activity) return null;
@@ -33,7 +34,10 @@ export default function ActivityCard({ activity }: Props) {
           title={activity?.title}
           subheader={
             <>
-              Hosted by <Link to={`/profiles/bob`}>Bob</Link>
+              Hosted by{" "}
+              <Link to={`/profiles/${activity.hostId}`}>
+                {activity.host.displayName}
+              </Link>
             </>
           }
         />
@@ -71,7 +75,16 @@ export default function ActivityCard({ activity }: Props) {
           gap={2}
           sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
         >
-          Attendees go here
+          {activity.attendees.map((att) => (
+            <Avatar
+              key={att.id}
+              src={att.imageUrl}
+              alt={att.displayName}
+              component={Link}
+              to={`/profiles/${att.id}`}
+              sx={{ width: 24, height: 24 }}
+            />
+          ))}
         </Box>
       </CardContent>
       <CardContent sx={{ pb: 2 }}>

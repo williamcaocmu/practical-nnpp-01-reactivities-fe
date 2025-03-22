@@ -2,7 +2,7 @@ import agent from "@/libs/api/agent";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ACTIVITY_QUERY_KEYS } from "./useActivities";
 
-const ACCOUNT_QUERY_KEYS = {
+export const ACCOUNT_QUERY_KEYS = {
   user: ["user"],
 } as const;
 

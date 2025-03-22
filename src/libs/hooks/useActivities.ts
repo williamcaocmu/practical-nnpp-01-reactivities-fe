@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import agent from "@/libs/api/agent";
+import { ACCOUNT_QUERY_KEYS } from "./useAccount";
 
 export const ACTIVITY_QUERY_KEYS = {
   all: ["activities"],
@@ -9,6 +10,7 @@ export const ACTIVITY_QUERY_KEYS = {
 
 export const useActivities = (id?: string) => {
   const queryClient = useQueryClient();
+  const user = queryClient.getQueryData<User>(ACCOUNT_QUERY_KEYS.user);
 
   const { data, isPending } = useQuery({
     queryKey: ACTIVITY_QUERY_KEYS.list(),
@@ -18,16 +20,28 @@ export const useActivities = (id?: string) => {
       );
       return response.data;
     },
+    select: (data) => {
+      return data.items.map((activity) => ({
+        ...activity,
+        isGoing: activity.attendees.some(
+          (attendee) => attendee.id === user?.id
+        ),
+        isHost: activity.hostId === user?.id,
+      }));
+    },
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
     queryKey: ACTIVITY_QUERY_KEYS.details(id),
     queryFn: async () => {
-      console.log(id);
       const response = await agent.get<Activity>(`/activities/${id}`);
       return response.data;
     },
     enabled: !!id,
+    select: (data) => ({
+      ...data,
+      isGoing: data.attendees.some((attendee) => attendee.id === user?.id),
+    }),
   });
 
   const createActivity = useMutation({
@@ -40,8 +54,8 @@ export const useActivities = (id?: string) => {
     },
   });
 
-  const activities = data?.items;
-  const activityPageInfo = data?.pageInfo;
+  const activities = data;
+  const activityPageInfo = {};
 
   return {
     activities,

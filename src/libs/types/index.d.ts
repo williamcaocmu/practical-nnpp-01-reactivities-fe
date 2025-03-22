@@ -11,6 +11,10 @@ type Activity = {
   latitude: number;
   longitude: number;
   date: Date | string;
+  attendees: Profile[];
+  isGoing: boolean;
+  hostId: string;
+  host: Profile;
 };
 
 type CursorPagedList<T> = {
@@ -23,7 +27,14 @@ type CursorPagedList<T> = {
 
 type User = {
   id: string;
-  email: string;
+  username: string;
   displayName: string;
+  imageUrl?: string;
+};
+
+type Profile = {
+  id: string;
+  displayName: string;
+  bio?: string;
   imageUrl?: string;
 };
