@@ -1,4 +1,4 @@
-import ProfileCard from "@/features/profiles/ProfileCard";
+import AvatarPopover from "@/shared/components/AvatarPopover";
 import { AccessTime, Place } from "@mui/icons-material";
 import {
   Avatar,
@@ -44,10 +44,20 @@ export default function ActivityCard({ activity }: Props) {
         />
         <Box display="flex" flexDirection="column" gap={2} mr={2}>
           {(isHost || isGoing) && (
-            <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
+            <Chip
+              label={label}
+              color={color}
+              sx={{ borderRadius: 2 }}
+              variant="outlined"
+            />
           )}
           {isCancelled && (
-            <Chip label="Cancelled" color="error" sx={{ borderRadius: 2 }} />
+            <Chip
+              label="Cancelled"
+              color="error"
+              sx={{ borderRadius: 2 }}
+              variant="outlined"
+            />
           )}
         </Box>
       </Box>
@@ -77,7 +87,7 @@ export default function ActivityCard({ activity }: Props) {
           sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
         >
           {activity.attendees.map((att) => (
-            <ProfileCard key={att.id} profile={att} />
+            <AvatarPopover key={att.id} profile={att} />
           ))}
         </Box>
       </CardContent>

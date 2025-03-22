@@ -36,7 +36,7 @@ export default function ProfileCard({ profile }: Props) {
         />
         <CardContent>
           <Box display="flex" alignItems="center" gap={1}>
-            <Typography variant="h5">{profile.displayName}</Typography>
+            <Typography variant="h5">{profile.displayName} </Typography>
             {following && (
               <Chip
                 size="small"
