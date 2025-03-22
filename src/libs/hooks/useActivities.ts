@@ -60,10 +60,48 @@ export const useActivities = (id?: string) => {
       const response = await agent.post(`/activities/${id}/attend`);
       return response.data;
     },
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({
-        queryKey: ACTIVITY_QUERY_KEYS.all,
+    onMutate: async (activityId: string) => {
+      const key = ACTIVITY_QUERY_KEYS.details(activityId);
+      await queryClient.cancelQueries({ queryKey: key });
+      const previousActivity = queryClient.getQueryData<Activity>(key);
+
+      queryClient.setQueryData(key, (data: Activity) => {
+        if (!data || !user) return data;
+        const isHost = data.hostId === user.id;
+        const isAttending = data.attendees.some(
+          (attendee) => attendee.id === user.id
+        );
+
+        return {
+          ...data,
+          isCanceled: isHost ? !data.isCanceled : data.isCanceled,
+          attendees: isAttending
+            ? isHost
+              ? data.attendees
+              : data.attendees.filter((att) => att.id !== user.id)
+            : [
+                ...data.attendees,
+                {
+                  id: user.id,
+                  displayName: user.displayName,
+                  imageUrl: user.imageUrl,
+                },
+              ],
+        };
       });
+
+      return { previousActivity };
+    },
+    onError: (_, activityId, context) => {
+      if (context?.previousActivity) {
+        queryClient.setQueryData(
+          ACTIVITY_QUERY_KEYS.details(activityId),
+          context?.previousActivity
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ACTIVITY_QUERY_KEYS.all });
     },
   });
 
