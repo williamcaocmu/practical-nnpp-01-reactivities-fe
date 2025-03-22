@@ -6,11 +6,6 @@ type Props = {
 };
 
 export default function ActivityDetailsHeader({ activity }: Props) {
-  const isCancelled = false;
-  const isHost = true;
-  const isGoing = true;
-  const loading = false;
-
   return (
     <Card
       sx={{
@@ -20,7 +15,7 @@ export default function ActivityDetailsHeader({ activity }: Props) {
         overflow: "hidden",
       }}
     >
-      {isCancelled && (
+      {activity.isCanceled && (
         <Badge
           sx={{ position: "absolute", left: 40, top: 20, zIndex: 1000 }}
           color="error"
@@ -74,21 +69,23 @@ export default function ActivityDetailsHeader({ activity }: Props) {
 
         {/* Buttons aligned to the right */}
         <Box sx={{ display: "flex", gap: 2 }}>
-          {isHost ? (
+          {activity.isHost ? (
             <>
               <Button
                 variant="contained"
-                color={isCancelled ? "success" : "error"}
+                color={activity.isCanceled ? "success" : "error"}
                 onClick={() => {}}
               >
-                {isCancelled ? "Re-activate Activity" : "Cancel Activity"}
+                {activity.isCanceled
+                  ? "Re-activate Activity"
+                  : "Cancel Activity"}
               </Button>
               <Button
                 variant="contained"
                 color="primary"
                 component={Link}
                 to={`/manage/activityId`}
-                disabled={isCancelled}
+                disabled={activity.isCanceled}
               >
                 Manage Event
               </Button>
@@ -96,11 +93,11 @@ export default function ActivityDetailsHeader({ activity }: Props) {
           ) : (
             <Button
               variant="contained"
-              color={isGoing ? "primary" : "info"}
+              color={activity.isGoing ? "primary" : "info"}
               onClick={() => {}}
-              disabled={isCancelled || loading}
+              disabled={activity.isCanceled}
             >
-              {isGoing ? "Cancel Attendance" : "Join Activity"}
+              {activity.isGoing ? "Cancel Attendance" : "Join Activity"}
             </Button>
           )}
         </Box>
