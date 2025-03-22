@@ -4,9 +4,11 @@ import TextField from "@mui/material/TextField";
 import { Link } from "react-router";
 import { useAccount } from "@/libs/hooks/useAccount";
 import { FormEvent } from "react";
+import { useNavigate } from "react-router";
 
 export default function LoginForm() {
   const { loginUser } = useAccount();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,7 +22,7 @@ export default function LoginForm() {
       },
       {
         onSuccess: () => {
-          console.log("success");
+          navigate("/activities");
         },
       }
     );

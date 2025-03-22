@@ -1,17 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import agent from "@/libs/api/agent";
 
-const activityQueryKeys = {
+export const ACTIVITY_QUERY_KEYS = {
   all: ["activities"],
-  list: () => [...activityQueryKeys.all, "list"],
-  details: (id?: string) => [...activityQueryKeys.all, "details", id],
+  list: () => [...ACTIVITY_QUERY_KEYS.all, "list"],
+  details: (id?: string) => [...ACTIVITY_QUERY_KEYS.all, "details", id],
 } as const;
 
 export const useActivities = (id?: string) => {
   const queryClient = useQueryClient();
 
   const { data, isPending } = useQuery({
-    queryKey: activityQueryKeys.list(),
+    queryKey: ACTIVITY_QUERY_KEYS.list(),
     queryFn: async () => {
       const response = await agent.get<CursorPagedList<Activity>>(
         `/activities`
@@ -21,7 +21,7 @@ export const useActivities = (id?: string) => {
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
-    queryKey: activityQueryKeys.details(id),
+    queryKey: ACTIVITY_QUERY_KEYS.details(id),
     queryFn: async () => {
       console.log(id);
       const response = await agent.get<Activity>(`/activities/${id}`);
@@ -36,7 +36,7 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: activityQueryKeys.all });
+      queryClient.invalidateQueries({ queryKey: ACTIVITY_QUERY_KEYS.all });
     },
   });
 

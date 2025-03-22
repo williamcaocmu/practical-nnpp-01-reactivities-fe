@@ -10,6 +10,7 @@ import {
 import { NavLink } from "react-router";
 import MenuItemLink from "@/shared/components/MenuItemLink";
 import { useAccount } from "@/libs/hooks/useAccount";
+import UserMenu from "./UserMenu";
 
 export default function NavBar() {
   const { user } = useAccount();
@@ -43,7 +44,7 @@ export default function NavBar() {
             </Box>
             <Box display="flex" alignContent="center">
               {user ? (
-                <Typography>Welcome {user.displayName}</Typography>
+                <UserMenu />
               ) : (
                 <>
                   <MenuItemLink to="/login">Login</MenuItemLink>
