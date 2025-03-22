@@ -41,6 +41,7 @@ export const useActivities = (id?: string) => {
     select: (data) => ({
       ...data,
       isGoing: data.attendees.some((attendee) => attendee.id === user?.id),
+      isHost: data.hostId === user?.id,
     }),
   });
 
@@ -54,6 +55,18 @@ export const useActivities = (id?: string) => {
     },
   });
 
+  const updateAttendee = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await agent.post(`/activities/${id}/attend`);
+      return response.data;
+    },
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({
+        queryKey: ACTIVITY_QUERY_KEYS.all,
+      });
+    },
+  });
+
   const activities = data;
   const activityPageInfo = {};
 
@@ -64,5 +77,6 @@ export const useActivities = (id?: string) => {
     isPending,
     isLoadingActivity,
     createActivity,
+    updateAttendee,
   };
 };

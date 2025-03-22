@@ -1,11 +1,14 @@
 import { Card, Badge, CardMedia, Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router";
+import { useActivities } from "@/libs/hooks/useActivities";
 
 type Props = {
   activity: Activity;
 };
 
 export default function ActivityDetailsHeader({ activity }: Props) {
+  const { updateAttendee } = useActivities(activity.id);
+
   return (
     <Card
       sx={{
@@ -74,7 +77,10 @@ export default function ActivityDetailsHeader({ activity }: Props) {
               <Button
                 variant="contained"
                 color={activity.isCanceled ? "success" : "error"}
-                onClick={() => {}}
+                onClick={() => {
+                  updateAttendee.mutate(activity.id);
+                }}
+                disabled={updateAttendee.isPending}
               >
                 {activity.isCanceled
                   ? "Re-activate Activity"
@@ -94,8 +100,10 @@ export default function ActivityDetailsHeader({ activity }: Props) {
             <Button
               variant="contained"
               color={activity.isGoing ? "primary" : "info"}
-              onClick={() => {}}
-              disabled={activity.isCanceled}
+              onClick={() => {
+                updateAttendee.mutate(activity.id);
+              }}
+              disabled={activity.isCanceled || updateAttendee.isPending}
             >
               {activity.isGoing ? "Cancel Attendance" : "Join Activity"}
             </Button>
