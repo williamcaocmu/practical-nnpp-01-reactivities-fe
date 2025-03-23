@@ -57,6 +57,23 @@ export const useProfile = (id?: string) => {
     },
   });
 
+  const setMainPhoto = useMutation({
+    mutationFn: async (photoId: string) => {
+      const response = await agent.put<Photo>(
+        `/profiles/photo/${photoId}/main`
+      );
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: PROFILE_QUERY_KEY.photos(id as string),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: PROFILE_QUERY_KEY.profile(id as string),
+      });
+    },
+  });
+
   return {
     profile,
     isLoadingProfile,
@@ -64,5 +81,6 @@ export const useProfile = (id?: string) => {
     isLoadingPhotos,
     isCurrentUser,
     uploadPhoto,
+    setMainPhoto,
   };
 };

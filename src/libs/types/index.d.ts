@@ -44,4 +44,5 @@ type Profile = {
 type Photo = {
   id: string;
   url: string;
+  isMain: boolean;
 };
