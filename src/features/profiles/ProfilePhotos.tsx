@@ -15,7 +15,7 @@ import DeleteButton from "@/shared/components/DeleteButton";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos, isCurrentUser, uploadPhoto, profile, setMainPhoto } =
+  const { photos, isCurrentUser, uploadPhoto, setMainPhoto, deletePhoto } =
     useProfile(id);
   const [editMode, setEditMode] = useState(false);
 
@@ -59,6 +59,15 @@ export default function ProfilePhotos() {
                       onClick={() => setMainPhoto.mutate(photo.id)}
                     >
                       <StarButton selected={photo.isMain} />
+                    </Box>
+                  )}
+
+                  {!photo.isMain && (
+                    <Box
+                      sx={{ position: "absolute", top: 0, right: 0 }}
+                      onClick={() => deletePhoto.mutate(photo.id)}
+                    >
+                      <DeleteButton />
                     </Box>
                   )}
                 </ImageListItem>
