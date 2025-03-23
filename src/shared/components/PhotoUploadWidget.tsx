@@ -5,9 +5,11 @@ import { useDropzone } from "react-dropzone";
 import { Cropper, ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-type Props = {};
+type Props = {
+  uploadPhoto: (file: Blob) => Promise<void>;
+};
 
-export default function PhotoUploadWidget(props: Props) {
+export default function PhotoUploadWidget({ uploadPhoto }: Props) {
   const [files, setFiles] = useState<object & { preview: string }[]>([]);
   const cropperRef = useRef<ReactCropperElement>(null);
 
@@ -23,7 +25,9 @@ export default function PhotoUploadWidget(props: Props) {
 
   const onCrop = useCallback(() => {
     const cropper = cropperRef.current?.cropper;
-    cropper?.getCroppedCanvas().toBlob((blob) => {});
+    cropper?.getCroppedCanvas().toBlob((blob) => {
+      uploadPhoto(blob as Blob);
+    });
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

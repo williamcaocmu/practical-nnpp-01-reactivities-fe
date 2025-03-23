@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "@/libs/api/agent";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
 
 const PROFILE_QUERY_KEY = {
@@ -36,5 +36,33 @@ export const useProfile = (id?: string) => {
     return userCache?.id === profile?.id;
   }, [userCache, profile]);
 
-  return { profile, isLoadingProfile, photos, isLoadingPhotos, isCurrentUser };
+  const uploadPhoto = useMutation({
+    mutationFn: async (file: Blob) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await agent.post<Photo>("/profiles/photo", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: PROFILE_QUERY_KEY.photos(id as string),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: PROFILE_QUERY_KEY.profile(id as string),
+      });
+    },
+  });
+
+  return {
+    profile,
+    isLoadingProfile,
+    photos,
+    isLoadingPhotos,
+    isCurrentUser,
+    uploadPhoto,
+  };
 };

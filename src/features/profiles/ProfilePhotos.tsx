@@ -8,13 +8,24 @@ import {
   ImageListItem,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import PhotoUploadWidget from "@/shared/components/PhotoUploadWidget";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos, isCurrentUser } = useProfile(id);
+  const { photos, isCurrentUser, uploadPhoto } = useProfile(id);
   const [editMode, setEditMode] = useState(false);
+
+  const handleUploadPhoto = useCallback(
+    async (file: Blob) => {
+      await uploadPhoto.mutateAsync(file, {
+        onSuccess: () => {
+          setEditMode(false);
+        },
+      });
+    },
+    [uploadPhoto]
+  );
 
   return (
     <Box>
@@ -31,7 +42,7 @@ export default function ProfilePhotos() {
 
       <Box>
         {editMode ? (
-          <PhotoUploadWidget />
+          <PhotoUploadWidget uploadPhoto={handleUploadPhoto} />
         ) : (
           <ImageList sx={{ height: 450 }} cols={6} rowHeight={164}>
             <>
