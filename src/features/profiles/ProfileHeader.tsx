@@ -15,7 +15,7 @@ import { useProfile } from "@/libs/hooks/useProfile";
 export default function ProfileHeader() {
   const { id } = useParams();
 
-  const { profile, isCurrentUser } = useProfile(id);
+  const { profile, isCurrentUser, updateFollowing } = useProfile(id);
 
   if (!profile) return <Typography>Profile not found</Typography>;
 
@@ -62,6 +62,8 @@ export default function ProfileHeader() {
                   fullWidth
                   variant="outlined"
                   color={profile.following ? "error" : "success"}
+                  onClick={() => updateFollowing.mutate()}
+                  disabled={updateFollowing.isPending}
                 >
                   {profile.following ? "Unfollow" : "Follow"}
                 </Button>

@@ -86,6 +86,45 @@ export const useProfile = (id?: string) => {
     },
   });
 
+  const updateFollowing = useMutation({
+    mutationFn: async () => {
+      const response = await agent.post<Profile>(`/profiles/${id}/follow`);
+      return response.data;
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: PROFILE_QUERY_KEY.profile(id as string),
+      });
+      const previousProfile = queryClient.getQueryData<Profile>(
+        PROFILE_QUERY_KEY.profile(id as string)
+      );
+      queryClient.setQueryData(
+        PROFILE_QUERY_KEY.profile(id as string),
+        (old: Profile) => {
+          return {
+            ...old,
+            following: !old.following,
+            followersCount: old.following
+              ? (old?.followersCount ?? 0) - 1
+              : (old?.followersCount ?? 0) + 1,
+          };
+        }
+      );
+      return previousProfile;
+    },
+    onError: (_, __, previousProfile) => {
+      queryClient.setQueryData(
+        PROFILE_QUERY_KEY.profile(id as string),
+        previousProfile
+      );
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: PROFILE_QUERY_KEY.profile(id as string),
+      });
+    },
+  });
+
   return {
     profile,
     isLoadingProfile,
@@ -95,5 +134,6 @@ export const useProfile = (id?: string) => {
     uploadPhoto,
     setMainPhoto,
     deletePhoto,
+    updateFollowing,
   };
 };
