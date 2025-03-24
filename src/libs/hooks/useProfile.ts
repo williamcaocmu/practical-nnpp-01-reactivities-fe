@@ -3,13 +3,19 @@ import agent from "@/libs/api/agent";
 import { useCallback, useMemo } from "react";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
 
+type Predicate = "followers" | "followings";
+
 const PROFILE_QUERY_KEY = {
   all: ["profiles"],
   profile: (id: string) => [...PROFILE_QUERY_KEY.all, id],
   photos: (id: string) => [...PROFILE_QUERY_KEY.profile(id), "photos"],
+  following: (id: string, predicate?: Predicate) => [
+    ...PROFILE_QUERY_KEY.profile(id),
+    predicate,
+  ],
 };
 
-export const useProfile = (id?: string) => {
+export const useProfile = (id?: string, predicate?: Predicate) => {
   const queryClient = useQueryClient();
   const userCache = queryClient.getQueryData<User>(ACCOUNT_QUERY_KEYS.user);
 
@@ -19,7 +25,7 @@ export const useProfile = (id?: string) => {
       const response = await agent.get<Profile>(`/profiles/${id}`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !predicate,
   });
 
   const { data: photos, isLoading: isLoadingPhotos } = useQuery({
@@ -125,6 +131,20 @@ export const useProfile = (id?: string) => {
     },
   });
 
+  const { data: followings, isLoading: isLoadingFollowings } = useQuery({
+    queryKey: PROFILE_QUERY_KEY.following(id as string, predicate),
+    queryFn: async () => {
+      const response = await agent.get<Profile[]>(
+        `/profiles/${id}/follow-list`,
+        {
+          params: { predicate },
+        }
+      );
+      return response.data;
+    },
+    enabled: !!id && !!predicate,
+  });
+
   return {
     profile,
     isLoadingProfile,
@@ -135,5 +155,7 @@ export const useProfile = (id?: string) => {
     setMainPhoto,
     deletePhoto,
     updateFollowing,
+    followings,
+    isLoadingFollowings,
   };
 };

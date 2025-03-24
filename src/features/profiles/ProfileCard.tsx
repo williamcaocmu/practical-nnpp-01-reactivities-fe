@@ -55,7 +55,8 @@ export default function ProfileCard({ profile }: Props) {
         >
           <Person />
           <Typography sx={{ ml: 1 }}>
-            {profile.followersCount} Followers
+            {/* TODO: fix this */}
+            {profile.followersCount || 0} Followers
           </Typography>
         </Box>
       </Card>
