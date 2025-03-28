@@ -8,6 +8,7 @@ import TextInput from "@/app/shared/components/TextInput";
 import { useActivities } from "@/libs/hooks/useActivities";
 import { activitySchema, ActivitySchema } from "@/libs/schemas/activitySchema";
 import { categoryOptions } from "./category-options";
+import DateTimeInput from "@/app/shared/components/DateTimeInput";
 
 type Props = {};
 
@@ -53,13 +54,7 @@ export default function ActivityForm({}: Props) {
           control={control}
           items={categoryOptions}
         />
-        <TextInput
-          label="Date"
-          type="date"
-          name="date"
-          control={control}
-          defaultValue={new Date().toISOString().split("T")[0]}
-        />
+        <DateTimeInput label="Date" name="date" control={control} />
         <TextInput label="City" name="city" control={control} />
         <TextInput label="Venue" name="venue" control={control} />
 
