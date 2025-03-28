@@ -16,8 +16,8 @@ export const activitySchema = z.object({
       message: "Venue is required",
     }),
     city: z.string().optional(),
-    lat: z.coerce.number(),
-    lng: z.coerce.number(),
+    latitude: z.coerce.number(),
+    longitude: z.coerce.number(),
   }),
 });
 

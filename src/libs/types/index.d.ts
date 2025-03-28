@@ -10,7 +10,7 @@ type Activity = {
   venue: string;
   latitude: number;
   longitude: number;
-  date: Date | string;
+  date: Date;
   attendees: Profile[];
   isGoing: boolean;
   hostId: string;

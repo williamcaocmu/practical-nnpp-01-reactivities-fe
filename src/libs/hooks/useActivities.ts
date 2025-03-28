@@ -1,7 +1,17 @@
 import agent from "@/libs/api/agent";
-import { ActivitySchema } from "@/libs/schemas/activitySchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
+
+type ActivityPayload = {
+  title: string;
+  description: string;
+  category: string;
+  date: Date;
+  latitude: number;
+  longitude: number;
+  city?: string;
+  venue?: string;
+};
 
 export const ACTIVITY_QUERY_KEYS = {
   all: ["activities"],
@@ -47,8 +57,21 @@ export const useActivities = (id?: string) => {
   });
 
   const createActivity = useMutation({
-    mutationFn: async (activity: ActivitySchema) => {
+    mutationFn: async (activity: ActivityPayload) => {
       const response = await agent.post(`/activities`, activity);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ACTIVITY_QUERY_KEYS.all });
+    },
+  });
+
+  const updateActivity = useMutation({
+    mutationFn: async (activity: ActivityPayload & { id: string }) => {
+      const response = await agent.patch(
+        `/activities/${activity.id}`,
+        activity
+      );
       return response.data;
     },
     onSuccess: () => {
@@ -112,6 +135,7 @@ export const useActivities = (id?: string) => {
   return {
     activities,
     activity,
+    updateActivity,
     activityPageInfo,
     isPending,
     isLoadingActivity,
