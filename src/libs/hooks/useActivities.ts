@@ -1,5 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import agent from "@/libs/api/agent";
+import { ActivitySchema } from "@/libs/schemas/activitySchema";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
 
 export const ACTIVITY_QUERY_KEYS = {
@@ -46,7 +47,7 @@ export const useActivities = (id?: string) => {
   });
 
   const createActivity = useMutation({
-    mutationFn: async (activity: Activity) => {
+    mutationFn: async (activity: ActivitySchema) => {
       const response = await agent.post(`/activities`, activity);
       return response.data;
     },
