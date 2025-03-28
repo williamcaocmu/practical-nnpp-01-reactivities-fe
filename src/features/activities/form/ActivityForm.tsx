@@ -1,18 +1,16 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { useActivities } from "@/libs/hooks/useActivities";
-import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
-import { activitySchema, ActivitySchema } from "@/libs/schemas/activitySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+
+import TextInput from "@/app/shared/components/TextInput";
+import { useActivities } from "@/libs/hooks/useActivities";
+import { activitySchema, ActivitySchema } from "@/libs/schemas/activitySchema";
 
 type Props = {};
 
 export default function ActivityForm({}: Props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ActivitySchema>({
+  const { handleSubmit, control } = useForm<ActivitySchema>({
     resolver: zodResolver(activitySchema),
   });
 
@@ -39,46 +37,25 @@ export default function ActivityForm({}: Props) {
         gap={3}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <TextField
-          label="Title"
-          {...register("title")}
-          error={!!errors.title}
-          helperText={errors.title?.message}
-        />
-        <TextField
+        <TextInput label="Title" name="title" control={control} />
+        <TextInput
           label="Description"
+          name="description"
           multiline
           rows={3}
-          {...register("description")}
-          error={!!errors.description}
-          helperText={errors.description?.message}
+          control={control}
         />
-        <TextField
-          label="Category"
-          {...register("category")}
-          error={!!errors.category}
-          helperText={errors.category?.message}
-        />
-        <TextField
+        <TextInput label="Category" name="category" control={control} />
+        <TextInput
           label="Date"
           type="date"
-          {...register("date")}
+          name="date"
+          control={control}
           defaultValue={new Date().toISOString().split("T")[0]}
-          error={!!errors.date}
-          helperText={errors.date?.message}
         />
-        <TextField
-          label="City"
-          {...register("city")}
-          error={!!errors.city}
-          helperText={errors.city?.message}
-        />
-        <TextField
-          label="Venue"
-          {...register("venue")}
-          error={!!errors.venue}
-          helperText={errors.venue?.message}
-        />
+        <TextInput label="City" name="city" control={control} />
+        <TextInput label="Venue" name="venue" control={control} />
+
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">Cancel</Button>
           <Button type="submit" color="success" variant="contained">
