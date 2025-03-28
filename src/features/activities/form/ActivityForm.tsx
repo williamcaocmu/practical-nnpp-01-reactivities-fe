@@ -1,21 +1,22 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useActivities } from "@/libs/hooks/useActivities";
-import { FormEvent } from "react";
 import { useNavigate } from "react-router";
+import { useForm, FieldValues } from "react-hook-form";
+import { activitySchema, ActivitySchema } from "@/libs/schemas/activitySchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Props = {};
 
 export default function ActivityForm({}: Props) {
+  const { register, handleSubmit } = useForm<ActivitySchema>({
+    resolver: zodResolver(activitySchema),
+  });
+
   const { createActivity } = useActivities();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const activity = Object.fromEntries(formData);
-
-    await createActivity.mutateAsync(activity as unknown as Activity);
-    navigate("/activities");
+  const onSubmit = async (data: FieldValues) => {
+    console.log(data);
   };
 
   return (
@@ -28,14 +29,24 @@ export default function ActivityForm({}: Props) {
         display="flex"
         flexDirection="column"
         gap={3}
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <TextField name="title" label="Title" />
-        <TextField name="description" label="Description" multiline rows={3} />
-        <TextField name="category" label="Category" />
-        <TextField name="date" label="Date" type="date" />
-        <TextField name="city" label="City" />
-        <TextField name="venue" label="Venue" />
+        <TextField label="Title" {...register("title")} />
+        <TextField
+          label="Description"
+          multiline
+          rows={3}
+          {...register("description")}
+        />
+        <TextField label="Category" {...register("category")} />
+        <TextField
+          label="Date"
+          type="date"
+          {...register("date")}
+          defaultValue={new Date().toISOString().split("T")[0]}
+        />
+        <TextField label="City" {...register("city")} />
+        <TextField label="Venue" {...register("venue")} />
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">Cancel</Button>
           <Button type="submit" color="success" variant="contained">
