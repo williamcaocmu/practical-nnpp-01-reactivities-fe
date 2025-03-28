@@ -11,11 +11,13 @@ export const activitySchema = z.object({
     message: "Description is required",
   }),
   date: z.coerce.date({ required_error: "Date is required" }),
-  city: z.string({ required_error: "City is required" }).min(1, {
-    message: "City is required",
-  }),
-  venue: z.string({ required_error: "Venue is required" }).min(1, {
-    message: "Venue is required",
+  location: z.object({
+    venue: z.string({ required_error: "Venue is required" }).min(1, {
+      message: "Venue is required",
+    }),
+    city: z.string().optional(),
+    lat: z.coerce.number(),
+    lng: z.coerce.number(),
   }),
 });
 

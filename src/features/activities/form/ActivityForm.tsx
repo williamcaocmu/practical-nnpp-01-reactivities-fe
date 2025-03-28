@@ -3,12 +3,13 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
+import DateTimeInput from "@/app/shared/components/DateTimeInput";
+import LocationInput from "@/app/shared/components/LocationInput";
 import SelectInput from "@/app/shared/components/SelectInput";
 import TextInput from "@/app/shared/components/TextInput";
 import { useActivities } from "@/libs/hooks/useActivities";
 import { activitySchema, ActivitySchema } from "@/libs/schemas/activitySchema";
 import { categoryOptions } from "./category-options";
-import DateTimeInput from "@/app/shared/components/DateTimeInput";
 
 type Props = {};
 
@@ -55,8 +56,7 @@ export default function ActivityForm({}: Props) {
           items={categoryOptions}
         />
         <DateTimeInput label="Date" name="date" control={control} />
-        <TextInput label="City" name="city" control={control} />
-        <TextInput label="Venue" name="venue" control={control} />
+        <LocationInput label="Location" name="location" control={control} />
 
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">Cancel</Button>
