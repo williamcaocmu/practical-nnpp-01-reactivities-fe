@@ -3,9 +3,11 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
+import SelectInput from "@/app/shared/components/SelectInput";
 import TextInput from "@/app/shared/components/TextInput";
 import { useActivities } from "@/libs/hooks/useActivities";
 import { activitySchema, ActivitySchema } from "@/libs/schemas/activitySchema";
+import { categoryOptions } from "./category-options";
 
 type Props = {};
 
@@ -45,7 +47,12 @@ export default function ActivityForm({}: Props) {
           rows={3}
           control={control}
         />
-        <TextInput label="Category" name="category" control={control} />
+        <SelectInput
+          label="Category"
+          name="category"
+          control={control}
+          items={categoryOptions}
+        />
         <TextInput
           label="Date"
           type="date"
