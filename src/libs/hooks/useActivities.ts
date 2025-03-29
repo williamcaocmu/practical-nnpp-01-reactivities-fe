@@ -6,6 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
+import ms from "ms";
 
 type ActivityPayload = {
   title: string;
@@ -43,7 +44,8 @@ export const useActivities = (id?: string) => {
         return response.data;
       },
       initialPageParam: null,
-      // @ts-ignore
+
+      staleTime: ms("5m"),
       getNextPageParam: (lastPage) => lastPage.pageInfo.nextCursor || null,
       select: (data) => ({
         ...data,

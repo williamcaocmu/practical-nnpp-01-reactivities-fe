@@ -15,7 +15,7 @@ export default function ActivityList() {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       {activitiesGrouped.pages.map((activities, index) => (
         <Box key={index} display="flex" flexDirection="column" gap={3}>
-          {activities?.items?.map((activity) => (
+          {activities.items.map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />
           ))}
         </Box>
