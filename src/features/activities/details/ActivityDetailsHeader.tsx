@@ -2,7 +2,7 @@ import { Card, Badge, CardMedia, Box, Typography } from "@mui/material";
 import { Link } from "react-router";
 import { useActivities } from "@/libs/hooks/useActivities";
 import StyledButton from "@/shared/components/StyledButton";
-
+import { formatDate } from "@/libs/utils/format-date";
 type Props = {
   activity: Activity;
 };
@@ -54,11 +54,7 @@ export default function ActivityDetailsHeader({ activity }: Props) {
             {activity.title}
           </Typography>
           <Typography variant="subtitle1">
-            {activity.date.toLocaleString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {formatDate(activity.date)}
           </Typography>
           <Typography variant="subtitle2">
             Hosted by{" "}

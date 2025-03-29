@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router";
+import { formatDate } from "@/libs/utils/format-date";
 
 type Props = {
   activity: Activity & { isGoing: boolean; isHost: boolean };
@@ -74,11 +75,7 @@ export default function ActivityCard({ activity }: Props) {
           <Box display="flex" flexGrow={0} alignItems="center">
             <AccessTime sx={{ mr: 1 }} />
             <Typography variant="body2" noWrap>
-              {activity?.date.toLocaleString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              {formatDate(activity.date)}
             </Typography>
           </Box>
 

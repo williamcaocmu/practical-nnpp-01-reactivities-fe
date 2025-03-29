@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CalendarToday, Info, Place } from "@mui/icons-material";
 import { Button, Divider, Grid2, Paper, Typography, Box } from "@mui/material";
+import { formatDate } from "@/libs/utils/format-date";
 import MapComponent from "@/app/shared/components/MapComponent";
 
 type Props = {
@@ -26,13 +27,7 @@ export default function ActivityDetailsInfo({ activity }: Props) {
           <CalendarToday color="info" fontSize="large" />
         </Grid2>
         <Grid2 size={11}>
-          <Typography>
-            {new Date(activity.date).toLocaleString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </Typography>
+          <Typography>{formatDate(activity.date)}</Typography>
         </Grid2>
       </Grid2>
       <Divider />
