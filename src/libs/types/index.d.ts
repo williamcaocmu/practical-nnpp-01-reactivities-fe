@@ -19,11 +19,11 @@ type Activity = {
   isGoing: boolean;
 };
 
-type CursorPagedList<T> = {
+type CursorPagedList<T, TCursor> = {
   items: T[];
   pageInfo: {
     hasNextPage: boolean;
-    nextCursor: string;
+    nextCursor: TCursor;
   };
 };
 
@@ -80,4 +80,11 @@ type LocationIQAddress = {
   country: string;
   country_code: string;
   neighbourhood?: string;
+};
+
+type PagedList<T> = {
+  items: T[];
+  pageInfo: {
+    nextCursor: string;
+  };
 };

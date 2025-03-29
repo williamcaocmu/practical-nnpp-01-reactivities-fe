@@ -1,15 +1,12 @@
 import { Grid2 } from "@mui/material";
-import ActivityList from "./ActivityList";
 import ActivityFilters from "./ActivityFilters";
-import { useActivities } from "@/libs/hooks/useActivities";
+import ActivityList from "./ActivityList";
 
 export default function ActivityDashboard() {
-  const { activities } = useActivities();
-
   return (
     <Grid2 container spacing={3}>
       <Grid2 size={7}>
-        <ActivityList activities={activities} />
+        <ActivityList />
       </Grid2>
       <Grid2 size={4}>
         <ActivityFilters />
