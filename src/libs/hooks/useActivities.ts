@@ -53,7 +53,7 @@ export const useActivities = (id?: string) => {
       },
       initialPageParam: null,
       staleTime: ms("5m"),
-      getNextPageParam: (lastPage) => lastPage.pageInfo.nextCursor || null,
+      getNextPageParam: (lastPage) => lastPage?.pageInfo?.nextCursor || null,
       select: (data) => ({
         ...data,
         pages: data.pages.map((page) => ({
