@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "@/libs/api/agent";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
+import { useProfileActivitiesFilters } from "./useProfileActivitiesFilters";
 
 type Predicate = "followers" | "followings";
 
@@ -13,11 +14,17 @@ const PROFILE_QUERY_KEY = {
     ...PROFILE_QUERY_KEY.profile(id),
     predicate,
   ],
+  userActivities: (filter: object) => [
+    ...PROFILE_QUERY_KEY.all,
+    "activities",
+    filter,
+  ],
 };
 
 export const useProfile = (id?: string, predicate?: Predicate) => {
   const queryClient = useQueryClient();
   const userCache = queryClient.getQueryData<User>(ACCOUNT_QUERY_KEYS.user);
+  const { filter, setFilter } = useProfileActivitiesFilters();
 
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: PROFILE_QUERY_KEY.profile(id as string),
@@ -37,6 +44,18 @@ export const useProfile = (id?: string, predicate?: Predicate) => {
     enabled: !!id,
   });
 
+  const { data: userActivities, isLoading: isLoadingUserActivities } = useQuery(
+    {
+      queryKey: PROFILE_QUERY_KEY.userActivities({ filter }),
+      queryFn: async () => {
+        const response = await agent.get<Activity[]>(
+          `/profiles/${id}/activities`,
+          { params: { filter } }
+        );
+        return response.data;
+      },
+    }
+  );
   const isCurrentUser = useMemo(() => {
     if (!userCache || !profile) return false;
     return userCache?.id === profile?.id;
@@ -157,5 +176,9 @@ export const useProfile = (id?: string, predicate?: Predicate) => {
     updateFollowing,
     followings,
     isLoadingFollowings,
+    userActivities,
+    isLoadingUserActivities,
+    filter,
+    setFilter,
   };
 };
