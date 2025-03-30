@@ -27,6 +27,14 @@ type CursorPagedList<T, TCursor> = {
   };
 };
 
+type ActivityComment = {
+  id: string;
+  body: string;
+  displayName: string;
+  createdAt: string;
+  imageUrl?: string;
+};
+
 type User = {
   id: string;
   username: string;
