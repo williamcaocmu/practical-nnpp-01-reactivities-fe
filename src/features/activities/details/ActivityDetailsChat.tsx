@@ -10,6 +10,7 @@ import {
 import { Link, useParams } from "react-router";
 import { useComments } from "@/libs/hooks/useComments";
 import { useState } from "react";
+import { timeAgo } from "@/libs/utils/format-date";
 
 export default function ActivityDetailsChat() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,7 @@ export default function ActivityDetailsChat() {
         body,
         activityId: id,
       });
+      setBody("");
     }
   };
   return (
@@ -60,6 +62,7 @@ export default function ActivityDetailsChat() {
                     ) : null,
                   },
                 }}
+                disabled={isCreatingComment}
               />
             </form>
           </div>
@@ -69,7 +72,7 @@ export default function ActivityDetailsChat() {
               comments.map((comment) => (
                 <Box sx={{ display: "flex", my: 2 }} key={comment.id}>
                   <Avatar
-                    src={"/images/user.png"}
+                    src={comment.imageUrl ?? "/images/user.png"}
                     alt={"user image"}
                     sx={{ mr: 2 }}
                   />
@@ -77,14 +80,14 @@ export default function ActivityDetailsChat() {
                     <Box display="flex" alignItems="center" gap={3}>
                       <Typography
                         component={Link}
-                        to={`/profiles/username`}
+                        to={`/profiles/${comment.displayName}`}
                         variant="subtitle1"
                         sx={{ fontWeight: "bold", textDecoration: "none" }}
                       >
                         {comment.displayName}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {comment.createdAt}
+                        {timeAgo(new Date(comment.createdAt))}
                       </Typography>
                     </Box>
 
