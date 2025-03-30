@@ -12,6 +12,7 @@ import "@fontsource/roboto/700.css";
 import "./app/layout/style.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { router } from "./app/router/Routes.tsx";
+import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,10 +28,12 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools />
-      </LocalizationProvider>
+      <NuqsAdapter>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools />
+        </LocalizationProvider>
+      </NuqsAdapter>
     </QueryClientProvider>
   </StrictMode>
 );

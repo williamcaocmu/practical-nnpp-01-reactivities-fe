@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { ACCOUNT_QUERY_KEYS } from "./useAccount";
 import ms from "ms";
+import { useActivityFilters } from "./useActivityFilters";
 
 type ActivityPayload = {
   title: string;
@@ -21,7 +22,11 @@ type ActivityPayload = {
 
 export const ACTIVITY_QUERY_KEYS = {
   all: ["activities"],
-  list: () => [...ACTIVITY_QUERY_KEYS.all, "list"],
+  list: (params?: Record<string, any>) => [
+    ...ACTIVITY_QUERY_KEYS.all,
+    "list",
+    params,
+  ],
   details: (id?: string) => [...ACTIVITY_QUERY_KEYS.all, "details", id],
 } as const;
 
@@ -29,15 +34,18 @@ export const useActivities = (id?: string) => {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>(ACCOUNT_QUERY_KEYS.user);
 
+  const { queryParams } = useActivityFilters();
+
   const { data, isPending, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useInfiniteQuery<CursorPagedList<Activity, string>>({
-      queryKey: ACTIVITY_QUERY_KEYS.list(),
+      queryKey: ACTIVITY_QUERY_KEYS.list(queryParams),
       queryFn: async ({ pageParam = null }) => {
         const response = await agent.get<CursorPagedList<Activity, string>>(
           "/activities",
           {
             params: {
               cursor: pageParam,
+              ...queryParams,
             },
           }
         );
@@ -154,7 +162,6 @@ export const useActivities = (id?: string) => {
   });
 
   const activities = data;
-  const activityPageInfo = {};
 
   return {
     activitiesGrouped: activities,
@@ -163,7 +170,6 @@ export const useActivities = (id?: string) => {
     isFetchingNextPage,
     activity,
     updateActivity,
-    activityPageInfo,
     isPending,
     isLoadingActivity,
     createActivity,
