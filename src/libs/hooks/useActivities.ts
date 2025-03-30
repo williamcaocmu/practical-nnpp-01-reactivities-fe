@@ -44,7 +44,6 @@ export const useActivities = (id?: string) => {
         return response.data;
       },
       initialPageParam: null,
-
       staleTime: ms("5m"),
       getNextPageParam: (lastPage) => lastPage.pageInfo.nextCursor || null,
       select: (data) => ({
